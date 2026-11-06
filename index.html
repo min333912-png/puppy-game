@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIND & ELEMENT | 현대적 명리 라이프 코칭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-badge">LIFE NAVIGATION</span>
+        <h1>MIND &amp; ELEMENT</h1>
+      </div>
+      <p class="header-desc">20년 경력 명리학자 &amp; 라이프 코치의 현대적 사주 분석 리포트</p>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <!-- 좌측: 입력 및 오행 시뮬레이터 패널 -->
+    <section class="panel input-panel" aria-label="사주 데이터 설정">
+      <div class="panel-header">
+        <h2>분석 데이터 설정</h2>
+        <button id="resetDefaultBtn" class="btn-ghost" type="button" title="대화 기본값(갑목·편재격)으로 복원">
+          기본 프로필 복원
+        </button>
+      </div>
+      <p class="panel-subtitle">
+        생년월일을 입력해 자동 추출하거나, 오행과 일간을 직접 조절해 결과를 확인해 보세요.
+      </p>
+
+      <!-- 간편 생년월일 변환기 -->
+      <div class="quick-birth-box">
+        <label class="section-label" for="birthDateInput">생년월일로 빠른 설정 (선택)</label>
+        <div class="birth-row">
+          <input type="date" id="birthDateInput" value="1994-05-14" />
+          <input type="text" id="userNameInput" placeholder="이름 (예: 보민님)" value="보민" maxlength="12" />
+          <button id="calcBirthBtn" class="btn-secondary" type="button">일주 계산</button>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- 일간 및 격국 선택 -->
+      <div class="form-group">
+        <label class="section-label" for="dayMasterSelect">일간 (본원 · 나의 핵심 기질)</label>
+        <select id="dayMasterSelect">
+          <option value="갑목" selected>🌲 갑목 (甲木) - 곧게 뻗어나가는 거목 리더</option>
+          <option value="을목">🌿 을목 (乙木) - 유연하고 생명력 강한 화초</option>
+          <option value="병화">☀️ 병화 (丙火) - 세상을 비추는 뜨거운 태양</option>
+          <option value="정화">🕯️ 정화 (丁火) - 따뜻하고 집중력 높은 촛불</option>
+          <option value="무토">⛰️ 무토 (戊土) - 묵직하고 포용력 큰 대지</option>
+          <option value="기토">🌾 기토 (己土) - 실속 있고 비옥한 정원</option>
+          <option value="경금">⚔️ 경금 (庚金) - 결단력과 돌파력의 원석</option>
+          <option value="신금">💎 신금 (辛金) - 정교하고 예리한 보석</option>
+          <option value="임수">🌊 임수 (壬水) - 지혜롭고 스케일 큰 바다</option>
+          <option value="계수">🌧️ 계수 (癸水) - 스며드는 통찰력의 봄비</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="section-label" for="structureSelect">격국 (삶의 무대 · 사회적 무기)</label>
+        <select id="structureSelect">
+          <option value="편재격" selected>편재격 (偏財格) - 큰 판을 읽는 비즈니스·확장형</option>
+          <option value="정재격">정재격 (正財格) - 치밀한 관리와 안정적 성취형</option>
+          <option value="식신격">식신격 (食神格) - 깊이 있는 전문성과 창작 몰입형</option>
+          <option value="상관격">상관격 (傷官格) - 트렌드를 깨는 혁신 표현가형</option>
+          <option value="편관격">편관격 (偏官格) - 위기 돌파와 카리스마 리더형</option>
+          <option value="정관격">정관격 (正官格) - 시스템 구축과 신뢰의 조율가형</option>
+          <option value="편인격">편인격 (偏印格) - 독창적 통찰과 기획 전략가형</option>
+          <option value="정인격">정인격 (正印格) - 학문적 깊이와 멘토링 리더형</option>
+        </select>
+      </div>
+
+      <!-- 오행 분포 조절 -->
+      <div class="form-group">
+        <div class="label-with-badge">
+          <span class="section-label">오행 분포 (총 <strong id="totalElementsCount">8</strong>글자)</span>
+          <span class="lack-badge" id="lackingElementBadge">부족한 오행: 금(金)</span>
+        </div>
+
+        <div class="element-sliders">
+          <div class="element-control" data-el="목">
+            <div class="el-label">
+              <span class="el-dot dot-wood"></span>
+              <span>목(木 · 추진/성장)</span>
+            </div>
+            <div class="el-stepper">
+              <button type="button" class="step-btn" data-action="dec" data-target="wood">-</button>
+              <span id="val-wood" class="el-val">3</span>
+              <button type="button" class="step-btn" data-action="inc" data-target="wood">+</button>
+            </div>
+          </div>
+
+          <div class="element-control" data-el="화">
+            <div class="el-label">
+              <span class="el-dot dot-fire"></span>
+              <span>화(火 · 표현/열정)</span>
+            </div>
+            <div class="el-stepper">
+              <button type="button" class="step-btn" data-action="dec" data-target="fire">-</button>
+              <span id="val-fire" class="el-val">1</span>
+              <button type="button" class="step-btn" data-action="inc" data-target="fire">+</button>
+            </div>
+          </div>
+
+          <div class="element-control" data-el="토">
+            <div class="el-label">
+              <span class="el-dot dot-earth"></span>
+              <span>토(土 · 무대/신뢰)</span>
+            </div>
+            <div class="el-stepper">
+              <button type="button" class="step-btn" data-action="dec" data-target="earth">-</button>
+              <span id="val-earth" class="el-val">2</span>
+              <button type="button" class="step-btn" data-action="inc" data-target="earth">+</button>
+            </div>
+          </div>
+
+          <div class="element-control" data-el="금">
+            <div class="el-label">
+              <span class="el-dot dot-metal"></span>
+              <span>금(金 · 결단/규칙)</span>
+            </div>
+            <div class="el-stepper">
+              <button type="button" class="step-btn" data-action="dec" data-target="metal">-</button>
+              <span id="val-metal" class="el-val">0</span>
+              <button type="button" class="step-btn" data-action="inc" data-target="metal">+</button>
+            </div>
+          </div>
+
+          <div class="element-control" data-el="수">
+            <div class="el-label">
+              <span class="el-dot dot-water"></span>
+              <span>수(水 · 지혜/유연)</span>
+            </div>
+            <div class="el-stepper">
+              <button type="button" class="step-btn" data-action="dec" data-target="water">-</button>
+              <span id="val-water" class="el-val">2</span>
+              <button type="button" class="step-btn" data-action="inc" data-target="water">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="analyzeBtn" class="btn-primary" type="button">
+        라이프 코칭 리포트 업데이트
+      </button>
+    </section>
+
+    <!-- 우측: 코칭 리포트 결과 패널 -->
+    <section class="report-panel" aria-label="사주 코칭 리포트">
+      <!-- 상단 요약 히어로 카드 -->
+      <article class="hero-card">
+        <div class="hero-top">
+          <div class="hero-tags">
+            <span class="tag tag-primary" id="tagDayMaster">일간: 갑목(甲木)</span>
+            <span class="tag tag-secondary" id="tagStructure">격국: 편재격</span>
+            <span class="tag tag-accent" id="tagLacking">보완 에너지: 금(金 · 관성)</span>
+          </div>
+          <div class="lucky-pill" id="luckyColorPill">
+            <span class="color-swatch" id="luckyColorSwatch"></span>
+            <span>Lucky Color: <strong id="luckyColorText">화이트/실버</strong></span>
+          </div>
+        </div>
+
+        <p class="hero-eyebrow"><span id="reportUserName">보민</span>님의 라이프 코칭 키워드</p>
+        <h2 class="hero-title" id="summaryKeyword">"자유로운 탐험가형 전략가"</h2>
+        <p class="hero-quote">
+          사주는 정해진 운명의 감옥이 아니라, 나라는 사람의 <strong>사용 설명서</strong>이자 강점을 극대화하는 <strong>내비게이션</strong>입니다.
+        </p>
+
+        <!-- 오행 밸런스 시각화 바 -->
+        <div class="balance-chart-wrap">
+          <div class="balance-header">
+            <span>오행 에너지 밸런스</span>
+            <span id="balanceComment" class="balance-comment">목(추진력)과 수/토의 흐름이 좋고, 금(마무리·결단)을 루틴으로 채우면 완벽합니다.</span>
+          </div>
+          <div class="stacked-bar" id="stackedBar"></div>
+          <div class="bar-legend" id="barLegend"></div>
+        </div>
+      </article>
+
+      <!-- 3대 코칭 섹션 카드 -->
+      <div class="coaching-cards">
+        <article class="coach-card">
+          <div class="card-icon icon-wood">01</div>
+          <div class="card-body">
+            <span class="card-kicker">CHARACTER ANALYSIS · 본원의 특성</span>
+            <h3 id="charTitle">판 전체를 읽고 길을 내는 스타트업 창업가</h3>
+            <p id="characterAnalysis">
+              하늘을 향해 곧게 뻗어 나가는 큰 나무(갑목)의 추진력과 전체적인 판의 흐름을 읽는 비즈니스 감각(편재격)을 동시에 지닌 리더입니다. 든든한 에너지원과 실행력을 바탕으로 작은 디테일에 얽매이기보다 새로운 영역을 개척하고 큰 그림을 그릴 때 가장 빛나는 스타일입니다.
+            </p>
+          </div>
+        </article>
+
+        <article class="coach-card">
+          <div class="card-icon icon-metal">02</div>
+          <div class="card-body">
+            <span class="card-kicker">CAREER &amp; ENVIRONMENT · 커리어 솔루션</span>
+            <h3 id="careerTitle">‘통제’가 아닌 ‘자율’이 당신의 날개입니다</h3>
+            <p id="careerAdvice">
+              정해진 매뉴얼과 상명하복이 강조되는 수직적 조직보다는 자율성과 재량권이 크게 보장되는 환경에서 역량이 극대화됩니다. 신사업 기획, 애자일(Agile) 조직, 프로젝트 디렉팅처럼 스스로 규칙과 일정을 설계하고 주도적으로 의사결정을 내릴 수 있는 영역에서 압도적인 성과를 낼 수 있습니다.
+            </p>
+          </div>
+        </article>
+
+        <article class="coach-card highlight-card">
+          <div class="card-icon icon-routine">03</div>
+          <div class="card-body">
+            <span class="card-kicker">DAILY ACTION ROUTINE · 맞춤 개운 루틴</span>
+            <h3 id="actionTitle">저녁 10분, 가지치기 저널링 (3-Cut Rule)</h3>
+            <p id="actionTip">
+              매일 저녁 10분, 내일 떠오르는 수많은 아이디어와 할 일 중 가장 중요한 핵심 3가지만 남기고 나머지는 과감히 덜어내는 '가지치기 저널링(3-Cut Rule)'을 실천해 보세요. 부족한 결단력과 마무리의 힘(금 기운)을 보완하여 당신의 강력한 추진력을 가장 가치 있는 목표에 집중시켜 줍니다.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <!-- 인터랙티브 실천 워크북: 3-Cut 가지치기 저널링 -->
+      <section class="routine-tracker" aria-label="실천 루틴 워크북">
+        <div class="tracker-header">
+          <div>
+            <span class="tracker-badge">INTERACTIVE WORKBOOK</span>
+            <h3>오늘의 ‘3-Cut’ 가지치기 저널링 실천하기</h3>
+          </div>
+          <span class="tracker-progress" id="routineProgressText">0 / 3 완료</span>
+        </div>
+        <p class="tracker-desc">
+          부족한 <strong>금(金 · 결단과 마무리)</strong> 에너지를 채우는 가장 확실한 방법! 내일 반드시 끝낼 핵심 3가지만 남기고 체크해 보세요. (브라우저에 자동 저장됩니다)
+        </p>
+
+        <div class="cut-list" id="cutList">
+          <div class="cut-item">
+            <input type="checkbox" id="cutCheck1" class="cut-check" />
+            <input type="text" id="cutInput1" class="cut-input" placeholder="핵심 우선순위 1: 가장 임팩트가 큰 일 한 가지" value="신규 프로젝트 핵심 기획안 1페이지 구조 확정하기" />
+          </div>
+          <div class="cut-item">
+            <input type="checkbox" id="cutCheck2" class="cut-check" />
+            <input type="text" id="cutInput2" class="cut-input" placeholder="핵심 우선순위 2: 미뤄두었던 결정 내리기" value="불필요한 미팅 및 보류 안건 과감히 정리하기" />
+          </div>
+          <div class="cut-item">
+            <input type="checkbox" id="cutCheck3" class="cut-check" />
+            <input type="text" id="cutInput3" class="cut-input" placeholder="핵심 우선순위 3: 나를 위한 에너지 충전 루틴" value="퇴근 후 10분 책상 정리로 머릿속 비우기" />
+          </div>
+        </div>
+      </section>
+
+      <!-- JSON 데이터 뷰어 (프롬프트 엔지니어링 연동 확인용) -->
+      <section class="json-viewer-section">
+        <div class="json-header">
+          <div>
+            <span class="json-badge">STRUCTURED OUTPUT</span>
+            <h3>실시간 JSON 응답 데이터</h3>
+          </div>
+          <button id="copyJsonBtn" class="btn-secondary btn-sm" type="button">JSON 복사</button>
+        </div>
+        <pre id="jsonOutput" class="json-code" aria-live="polite"></pre>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>MIND &amp; ELEMENT — 고루한 숙명론을 넘어, 실행 가능한 라이프 전략을 제안합니다.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
